@@ -4,7 +4,7 @@ session_start(); // démarre la session
 // Vérification de la connexion de l'utilisateur
 if(!isset($_SESSION['user_id'])) {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: /Start-Hut/src/views/user/connexion.php");
+    header("Location: /Forloopix/src/views/user/connexion.php");
     exit();
 }
 
@@ -19,13 +19,13 @@ if(!isset($_SESSION['user_id'])) {
       <title>Mes annonces</title>
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+      <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
       <?php include('../../../templates/head.php'); ?>
       <script>
       // Script pour la confirmation de suppression
       function confirmDelete(id) {
           if(confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
-              window.location.href = '/Start-Hut/src/views/projet/espace-projet.php?delete=' + id;
+              window.location.href = '/Forloopix/src/views/projet/espace-projet.php?delete=' + id;
           }
       }
       </script>
@@ -54,7 +54,7 @@ if(!isset($_SESSION['user_id'])) {
         <?php endif; ?>
 
         <?php
-        require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+        require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
         $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
         
@@ -105,7 +105,7 @@ if(!isset($_SESSION['user_id'])) {
 
                 echo '<div class="button-container">';
                 echo '<button class="delete-button" onclick="confirmDelete(' . $row["id"] . ')">Supprimer</button>';
-                echo '<a href="/Start-Hut/src/views/projet/annonce/modifier_annonces.php?edit=' . $row["id"] . '" class="edit-button">Modifier</a>';
+                echo '<a href="/Forloopix/src/views/projet/annonce/modifier_annonces.php?edit=' . $row["id"] . '" class="edit-button">Modifier</a>';
                 echo '</div>';
                 echo '</div>';
             }

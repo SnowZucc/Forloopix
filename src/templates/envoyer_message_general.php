@@ -3,7 +3,7 @@
 session_start();
 
 // On inclut le fichier de configuration pour se connecter à la base
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // On récupère l'ID de l'expéditeur (l'utilisateur actuellement connecté)
 $expediteur = $_SESSION['user_id'] ?? null;

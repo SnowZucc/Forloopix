@@ -9,15 +9,15 @@ ini_set('display_errors', 0);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recrutement - Start-Hut</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-guillaume.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-guillaume.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
     <?php include('../../templates/head.php'); ?>
 </head>
 <?php include('../../templates/header.php'); ?>
 <body>
 
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 session_start();
 
 $porteur_id = $_SESSION['user_id'] ?? null;
@@ -125,7 +125,7 @@ foreach ($candidatures as $candidat) {
                         <?php foreach ($projet['membres'] as $membre) : ?>
                             <div class="equipe-card">
                                 <div class="equipe-avatar">
-                                    <img src="<?= $membre['photo_profil'] ?? '/Start-Hut/public/assets/img/APRIL.png'; ?>" alt="Avatar">
+                                    <img src="<?= $membre['photo_profil'] ?? '/Forloopix/public/assets/img/APRIL.png'; ?>" alt="Avatar">
                                 </div>
                                 <div class="equipe-info">
                                     <h4><?= htmlspecialchars($membre['prenom'] . ' ' . $membre['nom']) ?></h4>
@@ -156,7 +156,7 @@ foreach ($candidatures as $candidat) {
                         <?php foreach ($projet['candidats'] as $candidat) : ?>
                             <div class="recrutement-card">
                                 <div class="recrutement-avatar">
-                                    <img src="<?= $candidat['photo_profil'] ?? '/Start-Hut/public/assets/img/APRIL.png' ?>" alt="Avatar">
+                                    <img src="<?= $candidat['photo_profil'] ?? '/Forloopix/public/assets/img/APRIL.png' ?>" alt="Avatar">
                                 </div>
                                 <div class="recrutement-info">
                                     <h4><?= htmlspecialchars($candidat['prenom'] . ' ' . $candidat['nom']) ?></h4>

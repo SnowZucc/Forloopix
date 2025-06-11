@@ -8,7 +8,7 @@ session_start(); // démarrage de la session
 // Vérification de la connexion de l'utilisateur
 if(!isset($_SESSION['user_id'])) {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: /Start-Hut/src/views/user/connexion.php");
+    header("Location: /Forloopix/src/views/user/connexion.php");
     exit();
 }
 
@@ -40,7 +40,7 @@ $roles = $_SESSION['roles'] ?? null;
 
 // Traitement du formulaire de publication
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
     
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         unset($_SESSION['collaborateurs']);
         
         // Redirection vers la page des annonces avec un message de succès
-        header("Location: /Start-Hut/src/views/projet/espace-projet.php?success=1");
+        header("Location: /Forloopix/src/views/projet/espace-projet.php?success=1");
         exit();
     } else {
         $error = "Erreur lors de la publication: " . $conn->error;
@@ -91,8 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-meryem.css">
-        <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+        <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-meryem.css">
+        <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
         <title>Publier votre annonce - Start-Hut</title>
         <?php include('../../../templates/head.php'); ?>
     </head>

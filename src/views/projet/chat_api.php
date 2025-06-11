@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 $user_id = $_SESSION['user_id'] ?? null;
 $utilisateur_id = $_GET['utilisateur_id'] ?? $_POST['utilisateur_id'] ?? null;

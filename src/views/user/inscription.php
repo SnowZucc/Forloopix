@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 session_start();
 
 // Inclure le fichier de configuration
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // Variables de messages
 $successMessage = "";
@@ -67,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Inscription - Start-Hut</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-guillaume.css?v=4">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css?v=2">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-guillaume.css?v=4">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css?v=2">
     <?php include('../../templates/head.php'); ?>
 </head>
 

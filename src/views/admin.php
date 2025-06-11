@@ -3,11 +3,11 @@ session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // Vérifier si l'utilisateur est connecté et est admin
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
-    header("Location: /Start-Hut/public/index.php");
+    header("Location: /Forloopix/public/index.php");
     exit();
 }
 
@@ -89,9 +89,9 @@ if (!$connection_error && $result === false) {
 <head>
     <meta charset="utf-8">
     <title>Administration - Gestion des utilisateurs</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-quentin.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-guillaume.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-quentin.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-guillaume.css">
     <?php include('../templates/head.php'); ?>
     <style>
         .admin-container {

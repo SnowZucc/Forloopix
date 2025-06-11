@@ -11,8 +11,8 @@ $type = $_GET['type'] ?? 'guides'; // Détermine le type de contenu à afficher 
     <meta name="description" content="Ressources utiles pour vos projets startup">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-fatma.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-fatma.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
 
     <title>Start-Hut - Ressources</title>
     <?php include('../../../templates/head.php'); ?>

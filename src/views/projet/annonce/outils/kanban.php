@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recrutement - Start-Hut</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-guillaume.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-guillaume.css">
 </head>
 <body>
 

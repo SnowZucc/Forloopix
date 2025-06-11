@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'collaborateur') {
     header("Location: ../user/connexion.php");
@@ -22,7 +22,7 @@ $stmt = $conn->prepare("DELETE FROM Annonces_Sauvegardees WHERE id_utilisateur =
 $stmt->bind_param("ii", $id_utilisateur, $id_projet);
 $stmt->execute();
 
-header("Location: /Start-Hut/src/views/projet/espace-collaborateur.php?view=Hutbox&msg=deleted");
+header("Location: /Forloopix/src/views/projet/espace-collaborateur.php?view=Hutbox&msg=deleted");
 
 exit;
 ?>

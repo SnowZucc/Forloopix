@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // Vérifie que l'utilisateur est connecté et est collaborateur
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'collaborateur') {

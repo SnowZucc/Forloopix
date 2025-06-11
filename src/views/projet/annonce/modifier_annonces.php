@@ -3,10 +3,10 @@ session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /Start-Hut/src/views/user/connexion.php");
+    header("Location: /Forloopix/src/views/user/connexion.php");
     exit();
 }
 
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("ssssssii", $titre, $description, $categorie, $competences, $collaborateurs, $etat, $annonce_id, $_SESSION['user_id']);
 
     if ($stmt->execute()) {
-        header("Location: /Start-Hut/src/views/projet/espace-projet.php?success=update");
+        header("Location: /Forloopix/src/views/projet/espace-projet.php?success=update");
         exit();
     } else {
         $error_message = "Erreur lors de la mise à jour.";
@@ -68,12 +68,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Modifier l'annonce</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-quentin.css">
-    <?php include($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/src/templates/head.php'); ?>
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-quentin.css">
+    <?php include($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/src/templates/head.php'); ?>
 </head>
 <body>
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/src/templates/header.php'); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/src/templates/header.php'); ?>
 
 <div class="annonce-edit-container">
     <h2>Modifier l'annonce</h2>
@@ -122,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="annonce-button-container">
                 <input type="submit" class="save-button" value="Enregistrer les modifications">
-                <a href="/Start-Hut/src/views/projet/espace-projet.php" class="annuler-lien">Annuler</a>
+                <a href="/Forloopix/src/views/projet/espace-projet.php" class="annuler-lien">Annuler</a>
             </div>
         </form>
 
@@ -130,6 +130,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </div>
 
-<?php include($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/src/templates/footer.php'); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/src/templates/footer.php'); ?>
 </body>
 </html>

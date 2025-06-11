@@ -6,8 +6,8 @@
   <title>FAQ Start-Hut</title>
   <meta name="description" content="FAQ – Tout ce qu'il faut savoir sur Start-Hut">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-khaleb.css">
-  <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+  <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-khaleb.css">
+  <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
   
   <?php include('../templates/head.php'); ?>
 </head>
@@ -145,12 +145,12 @@
           <h2>Besoin d'aide ?</h2>
           <p>Nous sommes là pour vous aider.</p>
           
-          <a class="contact-button" href="/Start-Hut/src/views/contact.php">Contactez-nous </a>
+          <a class="contact-button" href="/Forloopix/src/views/contact.php">Contactez-nous </a>
         
         
         </div>
         <div class="contact-image">
-          <img src="/Start-Hut/public/assets/img/image-aide.png" alt="image d'aide" >
+          <img src="/Forloopix/public/assets/img/image-aide.png" alt="image d'aide" >
         </div>
       </div>
     </div>

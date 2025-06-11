@@ -1,6 +1,6 @@
 <?php
 // On inclut le fichier de configuration avec les constantes de connexion à la base de données
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // On récupère le terme de recherche envoyé en GET (ex: "jean"), ou une chaîne vide si rien n'est envoyé
 $term = $_GET['term'] ?? '';

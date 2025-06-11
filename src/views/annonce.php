@@ -5,9 +5,9 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-         <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-meryem.css">
-         <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-guillaume.css">
-        <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+         <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-meryem.css">
+         <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-guillaume.css">
+        <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
         <title>Annonce - Start-Hut</title>
         <?php include('../templates/head.php'); ?>
     </head>
@@ -46,7 +46,7 @@
         }
 
         // Inclusion du header contenant la navigation
-        require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+        require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
         
         $bdd = new PDO("mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8", DB_USER, DB_PASS);              // Création objet PDO pour connexion MySQL
         
@@ -100,7 +100,7 @@
     <!-- Colonne droite -->
     <div class="annonceDroite">
         <div class="carteProfil">
-            <img src="/Start-Hut/public/assets/img/APRIL.png" alt="Photo de profil" class="profilImage">
+            <img src="/Forloopix/public/assets/img/APRIL.png" alt="Photo de profil" class="profilImage">
             <h2><?= htmlspecialchars($annonce['prenom'] . ' ' . $annonce['nom']); ?></h2>
             <p><span>📍</span> Pays &nbsp;&nbsp; <span>💬</span> Langues</p>
             <button class="btnContact" onclick="openChatModal(<?= $annonce['createur'] ?>)">Contactez moi</button>
@@ -290,7 +290,7 @@ function dragElement(elmnt) {
                     <?php if ($from_hutbox): ?>
 
                         <!-- Bouton Supprimer des favoris -->
-                        <form method="POST" action="/Start-Hut/src/views/supprimer_sauvegarde.php" style="display: inline;">
+                        <form method="POST" action="/Forloopix/src/views/supprimer_sauvegarde.php" style="display: inline;">
                             <input type="hidden" name="id_projet" value="<?= $annonce['id'] ?>">
                             <button  type="submit" class="btnSupprimer">Supprimer</button>
                         </form>
@@ -310,16 +310,16 @@ function dragElement(elmnt) {
                 $from_page = $_GET['from'] ?? 'annonces';  // valeur par défaut : annonces
 
                 // Par défaut, retour = annonces.php
-                $return_link = '/Start-Hut/src/views/annonces.php';
+                $return_link = '/Forloopix/src/views/annonces.php';
 
                 // Si on vient d'index, on retourne vers index.php
                 if ($from_page === 'index') {
-                    $return_link = '/Start-Hut/public/index.php';
+                    $return_link = '/Forloopix/public/index.php';
                 }
 
                 // Si collaborateur et depuis hutbox → espace collaborateur
                 if ($user_type === 'collaborateur' && $from_page === 'hutbox') {
-                    $return_link = '/Start-Hut/src/views/projet/espace-collaborateur.php?view=Hutbox';
+                    $return_link = '/Forloopix/src/views/projet/espace-collaborateur.php?view=Hutbox';
                 }
                 ?>
                 <div style="margin: 20px;">

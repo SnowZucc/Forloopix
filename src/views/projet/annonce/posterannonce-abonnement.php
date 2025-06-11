@@ -4,7 +4,7 @@ session_start(); // démarre la session
 // Vérification de la connexion de l'utilisateur
 if(!isset($_SESSION['user_id'])) {
     // Rediriger vers la page de connexion si l'utilisateur n'est pas connecté
-    header("Location: /Start-Hut/src/views/user/connexion.php");
+    header("Location: /Forloopix/src/views/user/connexion.php");
     exit();
 }
 
@@ -61,8 +61,8 @@ if($missing_data) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-meryem.css">
-        <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+        <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-meryem.css">
+        <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
         <title>Choisir un abonnement - Start-Hut</title>
         <?php include('../../../templates/head.php'); ?>
     </head>

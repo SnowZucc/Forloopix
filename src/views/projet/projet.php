@@ -1,6 +1,6 @@
 
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 session_start();
 
 $porteur_id = $_SESSION['user_id'] ?? null;
@@ -37,8 +37,8 @@ if ($porteur_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Projet - Start-Hut</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-fatma.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-fatma.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
     <?php include('../../templates/head.php'); ?>
 </head>
 <body>

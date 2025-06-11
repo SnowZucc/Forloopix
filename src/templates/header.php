@@ -5,7 +5,7 @@ ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
 <div class="navbar-container">
     <nav class="navbar">
         <div class="logo">
-            <a href="/Start-Hut/public/index.php"><img src="/Start-Hut/public/assets/img/logo.png" alt="Logo"></a>
+            <a href="/Forloopix/public/index.php"><img src="/Forloopix/public/assets/img/logo.png" alt="Logo"></a>
         </div>
 
 
@@ -23,40 +23,40 @@ $user_type = $_SESSION['user_type'] ?? null;
 
 <ul class="nav-links mobile-menu">
   <?php if ($user_type === 'porteur'): ?>
-    <li><a href="/Start-Hut/src/views/annonces.php">Annonces</a></li>
-    <li><a href="/Start-Hut/src/views/projet/annonce/posterannonce.php">Poster une annonce</a></li>
-    <li><a href="/Start-Hut/src/views/abonnements.php">Tarification</a></li>
-    <li><a href="/Start-Hut/src/views/faq.php">FAQ</a></li>
-    <li><a href="/Start-Hut/src/views/contact.php">Nous contacter</a></li>
+    <li><a href="/Forloopix/src/views/annonces.php">Annonces</a></li>
+    <li><a href="/Forloopix/src/views/projet/annonce/posterannonce.php">Poster une annonce</a></li>
+    <li><a href="/Forloopix/src/views/abonnements.php">Tarification</a></li>
+    <li><a href="/Forloopix/src/views/faq.php">FAQ</a></li>
+    <li><a href="/Forloopix/src/views/contact.php">Nous contacter</a></li>
   <?php elseif ($user_type === 'collaborateur'): ?>
-    <li><a href="/Start-Hut/src/views/annonces.php">Annonces</a></li>
-    <li><a href="/Start-Hut/src/views/abonnements.php">Tarification</a></li>
-    <li><a href="/Start-Hut/src/views/faq.php">FAQ</a></li>
-    <li><a href="/Start-Hut/src/views/contact.php">Nous contacter</a></li>
+    <li><a href="/Forloopix/src/views/annonces.php">Annonces</a></li>
+    <li><a href="/Forloopix/src/views/abonnements.php">Tarification</a></li>
+    <li><a href="/Forloopix/src/views/faq.php">FAQ</a></li>
+    <li><a href="/Forloopix/src/views/contact.php">Nous contacter</a></li>
   <?php else: ?>
-    <li><a href="/Start-Hut/src/views/annonces.php">Annonces</a></li>
-    <li><a href="/Start-Hut/src/views/abonnements.php">Tarification</a></li>
-    <li><a href="/Start-Hut/src/views/faq.php">FAQ</a></li>
-    <li><a href="/Start-Hut/src/views/contact.php">Nous contacter</a></li>
+    <li><a href="/Forloopix/src/views/annonces.php">Annonces</a></li>
+    <li><a href="/Forloopix/src/views/abonnements.php">Tarification</a></li>
+    <li><a href="/Forloopix/src/views/faq.php">FAQ</a></li>
+    <li><a href="/Forloopix/src/views/contact.php">Nous contacter</a></li>
   <?php endif; ?>
 </ul>
 
 <div class="auth-buttons mobile-menu">
   <?php if (!isset($_SESSION['user_id'])): ?>
-    <a href="/Start-Hut/src/views/user/connexion.php" class="signup">Se connecter</a>
+    <a href="/Forloopix/src/views/user/connexion.php" class="signup">Se connecter</a>
   <?php else: ?>
     <?php if ($user_type === 'porteur'): ?>
-      <a href="/Start-Hut/src/views/projet/espace-projet.php" class="signup">Espace projet</a>
+      <a href="/Forloopix/src/views/projet/espace-projet.php" class="signup">Espace projet</a>
     <?php elseif ($user_type === 'collaborateur'): ?>
-      <a href="/Start-Hut/src/views/projet/espace-collaborateur.php" class="signup">Espace collaborateur</a>
+      <a href="/Forloopix/src/views/projet/espace-collaborateur.php" class="signup">Espace collaborateur</a>
     <?php elseif ($user_type === 'admin'): ?>
-      <a href="/Start-Hut/src/views/admin.php" class="signup">Panel Admin</a>
+      <a href="/Forloopix/src/views/admin.php" class="signup">Panel Admin</a>
     <?php endif; ?>
-    <a href="/Start-Hut/src/views/user/profil.php" class="signup">Mon profil</a>
+    <a href="/Forloopix/src/views/user/profil.php" class="signup">Mon profil</a>
 
     <?php
     /* Commentaire de bloc pour le débogage
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if ($conn->connect_error) {
         die("Connexion échouée : " . $conn->connect_error);
@@ -73,8 +73,8 @@ $user_type = $_SESSION['user_type'] ?? null;
     $user_image = []; // Valeur par défaut pour éviter les erreurs sur la ligne suivante si le bloc est commenté
     ?>
 
-    <a href="/Start-Hut/src/views/user/profil.php" class="profile-image-link">
-      <img src="<?php echo $user_image['lien'] ?? '/Start-Hut/public/assets/img/APRIL.png'; ?>" class="header-profile-pic" alt="Photo de profil">
+    <a href="/Forloopix/src/views/user/profil.php" class="profile-image-link">
+      <img src="<?php echo $user_image['lien'] ?? '/Forloopix/public/assets/img/APRIL.png'; ?>" class="header-profile-pic" alt="Photo de profil">
     </a>
   <?php endif; ?>
 </div>

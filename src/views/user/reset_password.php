@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
-require $_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/vendor/autoload.php';
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
+require $_SERVER['DOCUMENT_ROOT'] . '/Forloopix/vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -126,8 +126,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Start-Hut - Réinitialisation de mot de passe</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-guillaume.css?v=4">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css?v=2">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-guillaume.css?v=4">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css?v=2">
     <?php include('../../templates/head.php'); ?>
 </head>
 <body>

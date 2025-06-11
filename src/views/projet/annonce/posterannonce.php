@@ -3,7 +3,7 @@ session_start(); // Starts or resumes a session
 // Checks if the user ID is set in the session
 if (!isset($_SESSION['user_id'])) {
     // Redirects to the login page if the user is not logged in
-    header('Location: /Start-Hut/src/views/user/connexion.php');
+    header('Location: /Forloopix/src/views/user/connexion.php');
     exit(); // Stops script execution after redirection
 }
 ?>
@@ -15,8 +15,8 @@ if (!isset($_SESSION['user_id'])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-meryem.css">
-        <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
+        <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-meryem.css">
+        <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
         <title>Poster une annonce - Start-Hut</title>
         <?php include('../../../templates/head.php'); ?>
     </head>

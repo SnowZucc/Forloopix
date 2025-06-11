@@ -3,7 +3,7 @@
 session_start();
 
 // On inclut le fichier de configuration contenant les infos de connexion à la base de données
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // On récupère l'identifiant de l'utilisateur connecté
 $user_id = $_SESSION['user_id'] ?? null;
@@ -140,7 +140,7 @@ $conn->close();
     </div>
 
     <!-- Formulaire pour envoyer un message général -->
-    <form action="/Start-Hut/src/templates/envoyer_message_general.php" method="POST">
+    <form action="/Forloopix/src/templates/envoyer_message_general.php" method="POST">
       <textarea name="contenu" required style="width:100%; height:60px;" placeholder="Écrivez un message visible par tous..."></textarea><br>
       <button type="submit" style="width:100%;">Envoyer à tous</button>
     </form>
@@ -164,7 +164,7 @@ $conn->close();
     </div>
 
     <!-- Formulaire classique pour envoyer un message à ce contact -->
-    <form action="/Start-Hut/src/templates/envoyer_message.php" method="POST">
+    <form action="/Forloopix/src/templates/envoyer_message.php" method="POST">
       <input type="hidden" name="destinataire_id" value="<?= htmlspecialchars($contact_id) ?>">
       <textarea name="contenu" required style="width:100%; height:60px;"></textarea><br>
       <button type="submit" style="width:100%;">Envoyer</button>
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
     formData.append("contenu", form.elements["contenu"].value);
 
     // Envoi vers le fichier PHP
-    fetch('/Start-Hut/src/templates/envoyer_message.php', {
+    fetch('/Forloopix/src/templates/envoyer_message.php', {
       method: 'POST',
       body: formData
     }).then(response => {
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Attente de 300ms après frappe pour éviter les requêtes inutiles
     timeout = setTimeout(() => {
-      fetch(`/Start-Hut/src/templates/recherche_utilisateurs.php?term=${encodeURIComponent(query)}`)
+      fetch(`/Forloopix/src/templates/recherche_utilisateurs.php?term=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
           const datalistId = 'suggestions-destinataires';

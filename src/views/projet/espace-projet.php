@@ -11,7 +11,7 @@ if(isset($_GET['delete']) && is_numeric($_GET['delete'])) {
         exit();
     }
 
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     
     if ($conn->connect_error) {
@@ -78,8 +78,8 @@ ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Projet - Start-Hut</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-guillaume.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-guillaume.css">
     <?php include('../../templates/head.php'); ?>
 </head>
 <body>

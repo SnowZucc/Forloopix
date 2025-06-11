@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Mon Profil</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-quentin.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-quentin.css">
     <?php include('../../templates/head.php'); ?>
 </head>
 <body>
@@ -18,11 +18,11 @@ error_reporting(E_ALL);
 if (isset($_GET['logout'])) {
     session_unset();
     session_destroy();
-    header("Location: /Start-Hut/public/index.php"); // Redirige vers la page d'accueil
+    header("Location: /Forloopix/public/index.php"); // Redirige vers la page d'accueil
     exit();
 }
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 include('../../templates/header.php');
 
 // Connexion à la base de données
@@ -58,7 +58,7 @@ if (isset($_SESSION['user_id'])) {
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 } else {
-    header("Location: /Start-Hut/public/index.php");
+    header("Location: /Forloopix/public/index.php");
     exit();
 }
 ?>
@@ -69,7 +69,7 @@ if (isset($_SESSION['user_id'])) {
         <form method="POST" action="">
             <div class="profile-container">
                 <label for="file-upload">
-                    <img src="<?php echo $user['lien'] ?? '/Start-Hut/public/assets/img/APRIL.png'; ?>" id="profile-pic" class="profile-pic" alt="Photo de profil">
+                    <img src="<?php echo $user['lien'] ?? '/Forloopix/public/assets/img/APRIL.png'; ?>" id="profile-pic" class="profile-pic" alt="Photo de profil">
                     <div class="edit-text">Modifier la photo</div>
                 </label>
                 <input type="file" id="file-upload" class="CV-input" accept="image/*">

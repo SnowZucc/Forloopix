@@ -1,1 +1,1 @@
-<link rel="icon" href="/Start-Hut/public/assets/img/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/Forloopix/public/assets/img/favicon.ico" type="image/x-icon">

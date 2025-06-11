@@ -5,15 +5,15 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <title>Annonces - Start-Hut</title>
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles.css">
-      <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-louis.css">
+      <link rel="stylesheet" href="/Forloopix/public/assets/css/styles.css">
+      <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-louis.css">
       <?php include('../templates/head.php'); ?>
   </head>
   <body>
     <?php include('../templates/header.php'); ?> <!-- Header -->
 
     <?php
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
     $q = $_GET['q'] ?? '';

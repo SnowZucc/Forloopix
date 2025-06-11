@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // Vérifie que l'utilisateur est connecté et est collaborateur
 if (!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'collaborateur') {
@@ -39,7 +39,7 @@ $result = $stmt->get_result();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hutbox – Start-Hut</title>
-    <link rel="stylesheet" href="/Start-Hut/public/assets/css/styles-khaleb.css">
+    <link rel="stylesheet" href="/Forloopix/public/assets/css/styles-khaleb.css">
 </head>
 <body>
     <div class="content">   
@@ -47,7 +47,7 @@ $result = $stmt->get_result();
         <div class="grid">
             <?php
             while($row = $result->fetch_assoc()) {
-                echo "<a href='/Start-Hut/src/views/annonce.php?id=" . $row['id'] . "&from=hutbox' class='nav-links'>";
+                echo "<a href='/Forloopix/src/views/annonce.php?id=" . $row['id'] . "&from=hutbox' class='nav-links'>";
                 echo "<figure>";
                 echo "<img src='" . ($row["lien"] ?? 'https://vection-cms-prod.s3.eu-central-1.amazonaws.com/Adobe_Stock_525614074_8ab9bd18e3.jpeg') . "'>";
                 echo "<figcaption>";

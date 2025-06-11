@@ -47,7 +47,7 @@ ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
     <section class="section-collaborateur">
         <div class="conteneur-collaborateur">
             <div class="image-collaborateur">
-                <img src="/Start-Hut/public/assets/img/pourquoinouschoisir.png" alt="Illustration collaboration">
+                <img src="/Forloopix/public/assets/img/pourquoinouschoisir.png" alt="Illustration collaboration">
             </div>
             <div class="texte-collaborateur">
                 <h2>Rejoignez l’aventure Start-Hut</h2>
@@ -68,9 +68,9 @@ ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
 
     <!-- Récupération projets populaires -->
     <?php
-    require_once($_SERVER['DOCUMENT_ROOT'] . '/Start-Hut/config/config.php');
+    require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
     $annonces_populaires = [];
-    $image_defaut = "/Start-Hut/public/assets/img/populaire1.png";
+    $image_defaut = "/Forloopix/public/assets/img/populaire1.png";
 
     try {
         $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -112,7 +112,7 @@ ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
                             </div>
                             <h3><?= htmlspecialchars($annonce['annonce_titre']) ?></h3>
                             <p><?= htmlspecialchars($annonce['annonce_description']) ?></p>
-                            <a href="/Start-Hut/src/views/annonce.php?id=<?= $annonce['id'] ?>&from=index" class="btn-details">Voir détails</a>
+                            <a href="/Forloopix/src/views/annonce.php?id=<?= $annonce['id'] ?>&from=index" class="btn-details">Voir détails</a>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
