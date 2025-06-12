@@ -22,13 +22,13 @@ $user_type = $_SESSION['user_type'] ?? null;
 ?>
 
 <ul class="nav-links mobile-menu">
-  <?php if ($user_type === 'porteur'): ?>
+  <?php if ($user_type === 'manager'): ?>
     <li><a href="/Forloopix/src/views/annonces.php">Annonces</a></li>
     <li><a href="/Forloopix/src/views/projet/annonce/posterannonce.php">Poster une annonce</a></li>
     <li><a href="/Forloopix/src/views/abonnements.php">Tarification</a></li>
     <li><a href="/Forloopix/src/views/faq.php">FAQ</a></li>
     <li><a href="/Forloopix/src/views/contact.php">Nous contacter</a></li>
-  <?php elseif ($user_type === 'collaborateur'): ?>
+  <?php elseif ($user_type === 'agent'): ?>
     <li><a href="/Forloopix/src/views/annonces.php">Annonces</a></li>
     <li><a href="/Forloopix/src/views/abonnements.php">Tarification</a></li>
     <li><a href="/Forloopix/src/views/faq.php">FAQ</a></li>
@@ -45,10 +45,10 @@ $user_type = $_SESSION['user_type'] ?? null;
   <?php if (!isset($_SESSION['user_id'])): ?>
     <a href="/Forloopix/src/views/user/connexion.php" class="signup">Se connecter</a>
   <?php else: ?>
-    <?php if ($user_type === 'porteur'): ?>
+    <?php if ($user_type === 'manager'): ?>
       <a href="/Forloopix/src/views/projet/espace-projet.php" class="signup">Espace projet</a>
-    <?php elseif ($user_type === 'collaborateur'): ?>
-      <a href="/Forloopix/src/views/projet/espace-collaborateur.php" class="signup">Espace collaborateur</a>
+    <?php elseif ($user_type === 'agent'): ?>
+      <a href="/Forloopix/src/views/projet/espace-agent.php" class="signup">Espace agent</a>
     <?php elseif ($user_type === 'admin'): ?>
       <a href="/Forloopix/src/views/admin.php" class="signup">Panel Admin</a>
     <?php endif; ?>

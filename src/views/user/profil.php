@@ -57,6 +57,10 @@ if (isset($_SESSION['user_id'])) {
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
+
+    if ($user) {
+        $_SESSION['user_type'] = $user['type'];
+    }
 } else {
     header("Location: /Forloopix/public/index.php");
     exit();

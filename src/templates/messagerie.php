@@ -12,7 +12,7 @@ $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) return;
 
 // Connexion à la base de données
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+// $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // ---------------------
 // Récupération des contacts avec qui j'ai déjà discuté
@@ -70,7 +70,7 @@ if ($contact_id && !$mode_general) {
 }
 
 // On ferme la connexion à la base
-$conn->close();
+// $conn->close();
 ?>
 <!-- On lie la feuille de style CSS externe pour la messagerie -->
 <link rel="stylesheet" href="assets/css/styles-meryem.css">

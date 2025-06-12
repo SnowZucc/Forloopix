@@ -116,12 +116,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label>Statut <span class="required">*</span></label>
                 <div class="statut-container">
                     <div class="statut-option">
-                        <input type="radio" id="porteur" name="statut" value="porteur" required>
-                        <label for="porteur">Porteur de projet</label>
+                        <input type="radio" id="manager" name="statut" value="manager" required>
+                        <label for="manager">Manager</label>
                     </div>
                     <div class="statut-option">
-                        <input type="radio" id="collaborateur" name="statut" value="collaborateur">
-                        <label for="collaborateur">Collaborateur</label>
+                        <input type="radio" id="agent" name="statut" value="agent">
+                        <label for="agent">Agent</label>
                     </div>
                 </div>
             </div>
