@@ -8,7 +8,7 @@ CREATE TABLE Utilisateurs (
     email VARCHAR(255) NOT NULL UNIQUE,
     mot_de_passe VARCHAR(255) NOT NULL,
     type ENUM('agent', 'manager', 'admin'),
-    etat ENUM('actif', 'inactif')
+    etat ENUM('actif', 'inactif') DEFAULT 'inactif'
 );
 
 CREATE TABLE Messages (

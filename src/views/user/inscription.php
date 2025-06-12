@@ -39,11 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $errorMessage = "Cet email est déjà enregistré.";
         } else {
             $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-            $description_profil = "Nouvel utilisateur";
-            $langues_parlees = "Français";
+            $etat = "actif";
 
-            $stmt = $conn->prepare("INSERT INTO Utilisateurs (nom, prenom, email, mot_de_passe, description_profil, langues_parlees, type) VALUES (?, ?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssssss", $nom, $prenom, $email, $hashed_password, $description_profil, $langues_parlees, $statut);
+            $stmt = $conn->prepare("INSERT INTO Utilisateurs (nom, prenom, email, mot_de_passe, type, etat) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssss", $nom, $prenom, $email, $hashed_password, $statut, $etat);
 
             if ($stmt->execute()) {
                 $successMessage = "Inscription réussie !";
