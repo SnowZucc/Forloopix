@@ -53,9 +53,9 @@ $current_attraction = $attractions[$attraction_id];
             <div class="ride-mockup">
                 <div class="track-title">POSITION DU WAGON</div>
                 <img src="<?= htmlspecialchars($current_attraction['image']) ?>" alt="Maquette du manège" class="ride-image">
-                <div class="sensor sensor-1 active"></div>
-                <div class="sensor sensor-2"></div>
-                <div class="sensor sensor-3"></div>
+                <div class="sensor sensor-1 active" style="top: <?= $current_attraction['led_positions']['sensor-1']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-1']['left'] ?>;"></div>
+                <div class="sensor sensor-2" style="top: <?= $current_attraction['led_positions']['sensor-2']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-2']['left'] ?>;"></div>
+                <div class="sensor sensor-3" style="top: <?= $current_attraction['led_positions']['sensor-3']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-3']['left'] ?>;"></div>
             </div>
         </div>
         <div class="panel-bottom">
