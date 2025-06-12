@@ -23,10 +23,9 @@ $user_type = $_SESSION['user_type'] ?? null;
 
 <ul class="nav-links mobile-menu">
   <?php if ($user_type === 'manager'): ?>
-    <li><a href="/Forloopix/src/views/annonces.php">Accueil</a></li>
-    <li><a href="/Forloopix/src/views/projet/annonce/posterannonce.php">Tableau</a></li>
-    <li><a href="/Forloopix/src/views/abonnements.php">Statistiques</a></li>
-    <li><a href="/Forloopix/src/views/faq.php">Capteurs</a></li>
+    <li><a href="/Forloopix/src/views/accueil.php">Tableau</a></li>
+    <li><a href="/Forloopix/src/views/statistiques.php">Statistiques</a></li>
+    <li><a href="/Forloopix/src/views/capteurs.php">Capteurs</a></li>
   <?php elseif ($user_type === 'agent'): ?>
     <li><a href="/Forloopix/src/views/annonces.php">Accueil</a></li>
     <li><a href="/Forloopix/src/views/projet/annonce/posterannonce.php">Tableau</a></li>
