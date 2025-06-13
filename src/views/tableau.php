@@ -3,6 +3,7 @@ error_reporting(E_ERROR); // Affiche uniquement les erreurs fatales
 ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
 
 require_once('../attractions_data.php');
+require_once('../../config/config.php'); 
 
 // Détermine l'attraction à afficher. 'goudurix' par défaut.
 $attraction_id = 'goudurix'; // ID par défaut
@@ -10,6 +11,22 @@ if (isset($_GET['attraction']) && array_key_exists($_GET['attraction'], $attract
     $attraction_id = $_GET['attraction'];
 }
 $current_attraction = $attractions[$attraction_id];
+
+// Récupère le nombre de lancements pour aujourd'hui depuis la BDD
+$todays_launch_count = 0;
+try {
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $stmt = $conn->prepare("SELECT COUNT(*) as launchCount FROM Launches WHERE attraction_id = ? AND DATE(launch_time) = CURDATE()");
+    $stmt->bind_param("s", $attraction_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $todays_launch_count = $row['launchCount'] ?? 0;
+    $stmt->close();
+} catch (Exception $e) {
+    // En cas d'erreur de BDD, on continue avec 0, mais on log l'erreur.
+    error_log("Erreur de récupération du compteur de lancements: " . $e->getMessage());
+}
 ?>
 
 <!DOCTYPE html>
@@ -39,8 +56,8 @@ $current_attraction = $attractions[$attraction_id];
     <div class="control-panel">
         <div class="panel-main">
             <div class="segment-display-container">
-                <p class="panel-title">COMPTEUR PASSAGES</p>
-                <div class="segment-display">03</div>
+                <p class="panel-title" id="display-title">COMPTEUR LANCEMENTS</p>
+                <div class="segment-display" id="segment-display">--</div>
             </div>
             <div class="seats-container">
                 <p class="panel-title">PLACES OCCUPÉES</p>
@@ -53,9 +70,9 @@ $current_attraction = $attractions[$attraction_id];
             <div class="ride-mockup">
                 <div class="track-title">POSITION DU WAGON</div>
                 <img src="<?= htmlspecialchars($current_attraction['image']) ?>" alt="Maquette du manège" class="ride-image">
-                <div class="sensor sensor-1 active" style="top: <?= $current_attraction['led_positions']['sensor-1']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-1']['left'] ?>;"></div>
-                <div class="sensor sensor-2" style="top: <?= $current_attraction['led_positions']['sensor-2']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-2']['left'] ?>;"></div>
-                <div class="sensor sensor-3" style="top: <?= $current_attraction['led_positions']['sensor-3']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-3']['left'] ?>;"></div>
+                <div id="sensor-1" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-1']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-1']['left'] ?>;"></div>
+                <div id="sensor-2" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-2']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-2']['left'] ?>;"></div>
+                <div id="sensor-3" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-3']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-3']['left'] ?>;"></div>
             </div>
         </div>
         <div class="panel-bottom">
@@ -63,17 +80,173 @@ $current_attraction = $attractions[$attraction_id];
                 <p class="panel-title">CRI-O-MÈTRE</p>
                 <div class="sonometer-bar">
                     <div class="sonometer-level" style="width: 75%;"></div>
-                </div>
+        </div>
                 <div class="sonometer-value">-12 dB</div>
             </div>
 
             <div class="controls">
-                <button class="btn-control start">START</button>
-                <button class="btn-control stop">STOP</button>
+                <button id="start-btn" class="btn-control start">START</button>
+                <button id="stop-btn" class="btn-control stop">STOP</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // --- CONFIGURATION & DOM ELEMENTS ---
+    const attractionId = '<?= $attraction_id ?>';
+    let currentLaunchCount = <?= $todays_launch_count ?>;
+
+    const display = document.getElementById('segment-display');
+    const displayTitle = document.getElementById('display-title');
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
+    const sensors = {
+        1: document.getElementById('sensor-1'),
+        2: document.getElementById('sensor-2'),
+        3: document.getElementById('sensor-3')
+    };
+
+    // --- STATE MANAGEMENT ---
+    let rideState = {
+        isRunning: false,
+        countdownInterval: null,
+        sonometerInterval: null,
+        sensorTimeouts: []
+    };
+
+    // --- DATA SIMULATION & API CALLS ---
+    function getSonometerValue() {
+        // Simulates fetching a value from a sensor
+        return Math.floor(Math.random() * ((-5) - (-25) + 1)) + (-25);
+    }
+    
+    function saveLaunch(passengerCount) {
+        console.log(`Enregistrement de ${passengerCount} passagers pour ${attractionId}...`);
+
+        fetch('/Forloopix/src/api/record_launch.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                attraction_id: attractionId,
+                passenger_count: passengerCount 
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Sauvegarde réussie, ID du lancement:', data.launch_id);
+            } else {
+                console.error('Erreur de sauvegarde:', data.message);
+                alert('Erreur lors de la sauvegarde du lancement : ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur de communication avec le serveur:', error);
+            alert('Erreur de communication avec le serveur.');
+        });
+    }
+
+    // --- CORE FUNCTIONS ---
+    function setDisplayValue(value) {
+        // Pad with '0' if it's a single digit number
+        display.textContent = String(value).padStart(2, '0');
+    }
+
+    function resetRide() {
+        console.log("Ride is resetting.");
+        // Clear all intervals and timeouts
+        clearInterval(rideState.countdownInterval);
+        clearInterval(rideState.sonometerInterval);
+        rideState.sensorTimeouts.forEach(clearTimeout);
+        rideState.sensorTimeouts = [];
+
+        // Reset visuals
+        Object.values(sensors).forEach(s => s.classList.remove('active'));
+        displayTitle.textContent = 'COMPTEUR PASSAGES';
+        setDisplayValue(currentLaunchCount);
+        
+        // Reset state
+        rideState.isRunning = false;
+        startBtn.disabled = false;
+        stopBtn.disabled = false;
+    }
+    
+    function startCountdown() {
+        if (rideState.isRunning) return;
+        
+        const occupiedSeats = document.querySelectorAll('.seat.occupied').length;
+        if (occupiedSeats === 0) {
+            alert("Impossible de lancer un manège vide !");
+            return;
+        }
+
+        rideState.isRunning = true;
+        startBtn.disabled = true;
+        
+        let countdown = 10;
+        displayTitle.textContent = 'COMPTE À REBOURS';
+        setDisplayValue(countdown);
+        console.log("Countdown started at:", countdown);
+        
+        rideState.countdownInterval = setInterval(() => {
+            console.log("Countdown tick, current value:", countdown);
+            
+            if (countdown <= 1) {
+                console.log("Countdown finished, starting ride simulation");
+                clearInterval(rideState.countdownInterval);
+                startRideSimulation(occupiedSeats);
+                return;
+            }
+            
+            countdown--;
+            setDisplayValue(countdown);
+            console.log("Countdown decremented to:", countdown);
+        }, 1000);
+    }
+
+    function startRideSimulation(passengerCount) {
+        console.log("Ride simulation started.");
+        currentLaunchCount++; 
+        saveLaunch(passengerCount);
+
+        displayTitle.textContent = 'SONOMÈTRE (dB)';
+        
+        // Affiche la première valeur immédiatement
+        const firstDbValue = getSonometerValue();
+        setDisplayValue(firstDbValue);
+
+        // Puis démarre les mises à jour
+        rideState.sonometerInterval = setInterval(() => {
+            const dbValue = getSonometerValue();
+            setDisplayValue(dbValue);
+        }, 1500);
+
+        // Schedule sensor activations
+        rideState.sensorTimeouts.push(setTimeout(() => triggerSensor(1), 4000));
+        rideState.sensorTimeouts.push(setTimeout(() => triggerSensor(2), 9000));
+        rideState.sensorTimeouts.push(setTimeout(() => triggerSensor(3), 14000));
+    }
+
+    function triggerSensor(sensorNumber) {
+        console.log(`Sensor ${sensorNumber} triggered.`);
+        sensors[sensorNumber].classList.add('active');
+        
+        // If it's the last sensor, end the ride
+        if (sensorNumber === 3) {
+            console.log("Final sensor triggered. Ride will end soon.");
+            rideState.sensorTimeouts.push(setTimeout(resetRide, 3000));
+        }
+    }
+
+    // --- EVENT LISTENERS ---
+    startBtn.addEventListener('click', startCountdown);
+    stopBtn.addEventListener('click', resetRide);
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', resetRide);
+
+</script>
 
 <?php include('../templates/footer.php'); ?>    
 </body>
