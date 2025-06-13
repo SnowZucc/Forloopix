@@ -40,3 +40,10 @@ INSERT INTO Utilisateurs (nom, prenom, email, mot_de_passe, type)
 VALUES ('Echtebez', 'Philippe', 'philippe.echtebez@start-hut.com', '$2y$10$8cFccmfc6dbRvqwgLvY72OMvXu42pzDmTtT2s68SFhgu3X9Xxn5Dq', 'agent');
 INSERT INTO Utilisateurs (nom, prenom, email, mot_de_passe, type)
 VALUES ('Alexandre', 'Louis', 'louis.alexandre@tutanota.com', '$2y$10$fcMAF5eBfJ5ipRcwafCRAepegQ2Lz0RlaHK4nDaMJmNTC36DPb.6G', 'admin');
+
+CREATE TABLE Launches (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    attraction_id VARCHAR(255) NOT NULL,
+    passenger_count INT NOT NULL,
+    launch_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
