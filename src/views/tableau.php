@@ -72,7 +72,6 @@ try {
                 <img src="<?= htmlspecialchars($current_attraction['image']) ?>" alt="Maquette du manège" class="ride-image">
                 <div id="sensor-1" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-1']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-1']['left'] ?>;"></div>
                 <div id="sensor-2" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-2']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-2']['left'] ?>;"></div>
-                <div id="sensor-3" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-3']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-3']['left'] ?>;"></div>
             </div>
         </div>
         <div class="panel-bottom">
@@ -103,16 +102,14 @@ try {
     const stopBtn = document.getElementById('stop-btn');
     const sensors = {
         1: document.getElementById('sensor-1'),
-        2: document.getElementById('sensor-2'),
-        3: document.getElementById('sensor-3')
+        2: document.getElementById('sensor-2')
     };
 
     // --- STATE MANAGEMENT ---
     let rideState = {
         isRunning: false,
         countdownInterval: null,
-        sonometerInterval: null,
-        sensorTimeouts: []
+        sonometerInterval: null
     };
 
     // --- DATA SIMULATION & API CALLS ---
@@ -147,6 +144,38 @@ try {
         });
     }
 
+    // --- SENSOR STATUS (from Database) ---
+    function fetchSensorStatus() {
+        fetch('/Forloopix/src/api/get_sensor_status.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    const sensorStatuses = data.data;
+                    // Mettre à jour l'état visuel des capteurs
+                    for (const sensorId in sensorStatuses) {
+                        const sensorNumber = sensorId.split('-')[1];
+                        if (sensors[sensorNumber]) {
+                            if (sensorStatuses[sensorId] == '1') {
+                                sensors[sensorNumber].classList.add('active');
+                            } else {
+                                sensors[sensorNumber].classList.remove('active');
+                            }
+                        }
+                    }
+                } else {
+                    console.error('Erreur de récupération des statuts des capteurs:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur de communication pour les capteurs:', error);
+            });
+    }
+
     // --- CORE FUNCTIONS ---
     function setDisplayValue(value) {
         // Pad with '0' if it's a single digit number
@@ -158,11 +187,8 @@ try {
         // Clear all intervals and timeouts
         clearInterval(rideState.countdownInterval);
         clearInterval(rideState.sonometerInterval);
-        rideState.sensorTimeouts.forEach(clearTimeout);
-        rideState.sensorTimeouts = [];
 
         // Reset visuals
-        Object.values(sensors).forEach(s => s.classList.remove('active'));
         displayTitle.textContent = 'COMPTEUR PASSAGES';
         setDisplayValue(currentLaunchCount);
         
@@ -222,21 +248,7 @@ try {
             setDisplayValue(dbValue);
         }, 1500);
 
-        // Schedule sensor activations
-        rideState.sensorTimeouts.push(setTimeout(() => triggerSensor(1), 4000));
-        rideState.sensorTimeouts.push(setTimeout(() => triggerSensor(2), 9000));
-        rideState.sensorTimeouts.push(setTimeout(() => triggerSensor(3), 14000));
-    }
-
-    function triggerSensor(sensorNumber) {
-        console.log(`Sensor ${sensorNumber} triggered.`);
-        sensors[sensorNumber].classList.add('active');
-        
-        // If it's the last sensor, end the ride
-        if (sensorNumber === 3) {
-            console.log("Final sensor triggered. Ride will end soon.");
-            rideState.sensorTimeouts.push(setTimeout(resetRide, 3000));
-        }
+        // La logique des capteurs est maintenant gérée par `fetchSensorStatus` et n'est plus liée au cycle du manège.
     }
 
     // --- EVENT LISTENERS ---
@@ -244,7 +256,12 @@ try {
     stopBtn.addEventListener('click', resetRide);
 
     // --- INITIALIZATION ---
-    document.addEventListener('DOMContentLoaded', resetRide);
+    document.addEventListener('DOMContentLoaded', () => {
+        resetRide();
+        // Récupération de l'état des capteurs en continu
+        fetchSensorStatus(); // Premier appel immédiat
+        setInterval(fetchSensorStatus, 2000); // Puis toutes les 2 secondes
+    });
 
 </script>
 
