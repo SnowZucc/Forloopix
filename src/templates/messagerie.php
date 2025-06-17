@@ -1,7 +1,7 @@
 <?php
 // On démarre la session uniquement si elle n'est pas déjà active
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+session_start();
 }
 
 // On inclut le fichier de configuration contenant les infos de connexion à la base de données
