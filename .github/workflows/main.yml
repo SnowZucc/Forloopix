@@ -24,4 +24,4 @@ jobs:
         echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
     - name: Deploy to VPS
-      run: ssh root@217.160.17.10 'bash /root/starthutGithubAction.sh'
+      run: ssh root@217.160.17.10 'bash /root/forloopixGithubAction.sh'
