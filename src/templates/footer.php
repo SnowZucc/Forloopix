@@ -30,11 +30,14 @@ $user_type = $_SESSION['user_type'] ?? null;
             <?php if (isset($_SESSION['user_id'])): ?>
                 <p><a href="/Forloopix/src/views/user/profil.php">Mon Profil</a></p>
                 <?php if ($user_type === 'admin'): ?>
+                    <p><a href="/Forloopix/src/views/statistiques.php">Statistiques</a></p>
+                    <p><a href="/Forloopix/src/views/accueil.php">Tableau</a></p>
+                    <p><a href="/Forloopix/src/views/capteurs.php">Capteurs</a></p>
                     <p><a href="/Forloopix/src/views/admin.php">Panneau Admin</a></p>
-                <?php elseif ($user_type === 'manager'): ?>
-                    <p><a href="/Forloopix/src/views/tableau.php">Tableau de bord</a></p>
                 <?php elseif ($user_type === 'agent'): ?>
-                     <p><a href="/Forloopix/src/views/accueil.php">Tableau de bord</a></p>
+                    <p><a href="/Forloopix/src/views/accueil.php">Tableau</a></p>
+                <?php else: ?>
+                    <p><a href="/Forloopix/src/views/statistiques.php">Statistiques</a></p>
                 <?php endif; ?>
                 <p><a href="/Forloopix/src/views/user/logout.php">Déconnexion</a></p>
             <?php else: ?>

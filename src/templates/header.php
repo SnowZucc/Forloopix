@@ -23,13 +23,15 @@ $user_type = $_SESSION['user_type'] ?? null;
 
 <ul class="nav-links mobile-menu">
   <?php if (isset($_SESSION['user_id'])): // Utilisateur connecté ?>
-    <li><a href="/Forloopix/src/views/statistiques.php">Statistiques</a></li>
-    <?php if ($user_type === 'manager'): ?>
+    <?php if ($user_type === 'admin'): ?>
+        <li><a href="/Forloopix/src/views/statistiques.php">Statistiques</a></li>
         <li><a href="/Forloopix/src/views/accueil.php">Tableau</a></li>
         <li><a href="/Forloopix/src/views/capteurs.php">Capteurs</a></li>
     <?php elseif ($user_type === 'agent'): ?>
-        <li><a href="/Forloopix/src/views/accueil.php">Accueil</a></li>
-        <li><a href="/Forloopix/src/views/tableau.php">Tableau</a></li>
+        <li><a href="/Forloopix/src/views/accueil.php">Tableau</a></li>
+    <?php else: // Pour les autres utilisateurs connectés non admin/agent ?>
+        <li><a href="/Forloopix/src/views/accueil.php">Tableau</a></li>
+        <li><a href="/Forloopix/src/views/statistiques.php">Statistiques</a></li>
     <?php endif; ?>
   <?php else: // Utilisateur non connecté ?>
     <li><a href="/Forloopix/src/views/abonnements.php">Tarification</a></li>
@@ -41,7 +43,9 @@ $user_type = $_SESSION['user_type'] ?? null;
     <a href="/Forloopix/src/views/user/connexion.php" class="signup">Se connecter</a>
   <?php else: ?>
     <a href="/Forloopix/src/views/user/profil.php" class="signup">Mon profil</a>
+    <?php if ($user_type === 'admin'): ?>
     <a href="/Forloopix/src/views/admin.php" class="signup">Panel Admin</a>
+    <?php endif; ?>
 
     <?php
     /* Commentaire de bloc pour le débogage
