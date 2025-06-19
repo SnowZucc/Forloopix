@@ -46,21 +46,21 @@ ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
                 <h2>Une suite complète pour une gestion parfaite.</h2>
                 <div class="liste-choix">
                     <figure>
-                        <img src="https://img.icons8.com/ios/50/27ae60/dashboard-layout.png" alt="Tableau de bord">
+                        <i class="fa-solid fa-gauge-high fa-3x" style="color: #27ae60;"></i>
                         <figcaption>
                             <h3>Tableau de Bord Live</h3>
                             <p>Gardez le contrôle total avec une vue d'ensemble en temps réel : démarrages, capteurs de position et 'Cri-o-mètre'.</p>
                         </figcaption>
                     </figure>
                     <figure>
-                        <img src="https://img.icons8.com/ios/50/27ae60/combo-chart.png" alt="Statistiques">
+                        <i class="fa-solid fa-chart-line fa-3x" style="color: #27ae60;"></i>
                         <figcaption>
                             <h3>Statistiques Détaillées</h3>
                             <p>Analysez les performances sur le long terme. Suivez le nombre de visiteurs, les lancements et les pics sonores par attraction.</p>
                         </figcaption>
                     </figure>
                     <figure>
-                        <img src="https://img.icons8.com/ios/50/27ae60/settings--v1.png" alt="Réglages">
+                        <i class="fa-solid fa-sliders fa-3x" style="color: #27ae60;"></i>
                         <figcaption>
                             <h3>Gestion des Capteurs</h3>
                             <p>Ajustez la sensibilité de vos capteurs et personnalisez les seuils d'alerte pour une sécurité et une maintenance optimales.</p>
@@ -84,9 +84,9 @@ ini_set('display_errors', 0); // N'affiche pas les erreurs à l'écran
                     Notre interface a été pensée pour être intuitive, rapide et fiable, même en conditions réelles. Moins de temps de formation, plus de temps pour assurer la sécurité et le plaisir de vos visiteurs.
                 </p>
                 <ul class="liste-arguments">
-                    <li>✅ Prise en main immédiate et sans effort</li>
-                    <li>📊 Des données claires pour des décisions rapides</li>
-                    <li>📱 Interface accessible sur tablette et mobile</li>
+                    <li>Prise en main immédiate et sans effort</li>
+                    <li>Des données claires pour des décisions rapides</li>
+                    <li>Interface accessible sur tablette et mobile</li>
                 </ul>
             </div>
         </div>

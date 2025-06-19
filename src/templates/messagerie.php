@@ -5,7 +5,7 @@ session_start();
 }
 
 // On inclut le fichier de configuration contenant les infos de connexion à la base de données
-// require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/Forloopix/config/config.php');
 
 // On récupère l'identifiant de l'utilisateur connecté
 $user_id = $_SESSION['user_id'] ?? null;
@@ -14,7 +14,7 @@ $user_id = $_SESSION['user_id'] ?? null;
 if (!$user_id) return;
 
 // La connexion $conn est supposée être déjà ouverte par la page parente (tableau.php)
-// $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // ---------------------
 // Récupération des contacts avec qui j'ai déjà discuté
@@ -72,10 +72,10 @@ if ($contact_id && !$mode_general) {
 }
 
 // On ferme la connexion à la base
-// $conn->close();
+$conn->close();
 ?>
 <!-- On lie la feuille de style CSS externe pour la messagerie -->
-<link rel="stylesheet" href="assets/css/styles-meryem.css">
+<link rel="stylesheet" href="/Forloopix/assets/css/styles-meryem.css">
 
 <!-- Librairie d'icônes (utilisée pour les bulles de messages) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
