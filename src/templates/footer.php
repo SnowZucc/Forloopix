@@ -21,7 +21,6 @@ $user_type = $_SESSION['user_type'] ?? null;
         <div class="footer-section">
             <h3>Navigation</h3>
             <p><a href="/Forloopix/public/index.php">Accueil</a></p>
-            <p><a href="/Forloopix/src/views/statistiques.php">Statistiques</a></p>
             <p><a href="/Forloopix/src/views/abonnements.php">Tarification</a></p>
             <p><a href="/Forloopix/src/views/contact.php">Contact</a></p>
         </div>
@@ -54,12 +53,9 @@ $user_type = $_SESSION['user_type'] ?? null;
             <h3>Légal</h3>
             <p><a href="/Forloopix/src/views/legal/cgu.php">CGU</a></p>
             <p><a href="/Forloopix/src/views/legal/mentions.php">Mentions légales</a></p>
-            <p><a href="/Forloopix/src/views/legal/cookies.php">Politique des cookies</a></p>
         </div>
     </div>
     <div class="footer-bottom">
-    <div id="wcb" class="carbonbadge wcb-d"></div>
-    <script src="https://unpkg.com/website-carbon-badges@1.1.3/b.min.js" defer></script>
         © <?php echo date("Y"); ?> StartHut - Tous droits réservés.
     </div>
 </footer>
