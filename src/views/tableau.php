@@ -338,17 +338,17 @@ try {
     }
 
     function updateSonometerGauge(value, isReset = false) {
+        let percentage = 0;
         if (isReset) {
             sonometerValue.textContent = '-- dB';
             sonometerLevel.style.width = '0%';
             return;
         }
     
-        let percentage = 0;
         if (sonometerMode.isReal) {
-            // Mode réel: on mappe une plage de 60-120 dB à 0-100%
-            const minDb = 60;
-            const maxDb = 120;
+            // Mode réel: on mappe une plage de 30-100 dB à 0-100%
+            const minDb = 30;
+            const maxDb = 100;
             percentage = Math.max(0, Math.min(100, ((value - minDb) / (maxDb - minDb)) * 100));
             sonometerValue.textContent = value.toFixed(1) + ' dB';
         } else {
@@ -391,6 +391,7 @@ try {
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
         resetRide();
+        sonometerModeToggleBtn.textContent = sonometerMode.isReal ? 'Sonomètre Réel' : 'Sonomètre Simulé';
         // Récupération de l'état des capteurs en continu
         fetchSensorStatus(); // Premier appel immédiat
         setInterval(fetchSensorStatus, 2000); // Puis toutes les 2 secondes
