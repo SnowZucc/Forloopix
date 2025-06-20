@@ -209,8 +209,44 @@
     box-shadow: 0 5px 0 #c0392b;
 }
 .btn-control.stop:active {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 #c0392b;
+    top: 5px;
+    box-shadow: 0 0 #c0392b;
+}
+
+.diagnostic-container {
+    margin: 20px -20px -20px -20px;
+    padding: 20px 20px 10px 20px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.diagnostic-container .setting-item {
+    padding-left: 0;
+    padding-right: 0;
+    background-color: transparent;
+}
+
+.diagnostic-container .setting-item:last-child {
+    border-bottom: none;
+}
+
+.status-indicator {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+    min-width: 70px;
+    text-align: center;
+}
+
+.status-indicator.status-active {
+    background-color: #28a745;
+}
+
+.status-indicator.status-inactive {
+    background-color: #6c757d;
 }
 
 /* --- FIN TABLEAU DE BORD --- */
@@ -219,7 +255,7 @@
 @media (max-width: 992px) {
     .panel-main {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
+        grid-template-rows: auto;
     }
 
     /* La maquette passe sous les autres panneaux sur les écrans plus petits */
@@ -539,4 +575,59 @@ input:checked + .slider:before {
     .stats-filters {
         flex-direction: column;
     }
+}
+
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+#tracking-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+#tracking-data-table th, #tracking-data-table td {
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+#tracking-data-table thead {
+    background-color: #f2f2f2;
+}
+
+#tracking-data-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#tracking-data-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.diagnostic-container .setting-item {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.diagnostic-container .setting-item:last-child {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.status-indicator {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.status-indicator.status-active {
+    background-color: #28a745;
+}
+
+.status-indicator.status-inactive {
+    background-color: #6c757d;
 } 

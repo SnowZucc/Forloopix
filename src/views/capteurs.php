@@ -34,24 +34,106 @@ ini_set('display_errors', 0);
                 <span style="margin-left: 5px;">secondes</span>
             </div>
         </div>
+
+        <div class="setting-item">
+            <div class="setting-info">
+                <h3 class="setting-title">Diagnostic Capteur Tracking</h3>
+                <p class="setting-description">Affiche le dernier état connu pour chaque tronçon et permet de réinitialiser les capteurs principaux.</p>
+            </div>
+            <div class="setting-control">
+                <button id="reset-sensors-btn" class="btn-control" style="background-color: #e74c3c; box-shadow: 0 5px 0 #c0392b;">Reset Capteurs</button>
+            </div>
+        </div>
+        <div id="tracking-data-container" class="diagnostic-container">
+            <!-- Les données de diagnostic seront insérées ici -->
+        </div>
     </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const delayInput = document.getElementById('ride-end-delay');
+    const trackingContainer = document.getElementById('tracking-data-container');
+    const resetSensorsBtn = document.getElementById('reset-sensors-btn');
 
-    // Charge la valeur depuis le localStorage si elle existe
+    // --- LOGIQUE POUR LE DÉLAI ---
     const savedDelay = localStorage.getItem('rideEndDelay');
     if (savedDelay) {
         delayInput.value = savedDelay;
     }
-
-    // Sauvegarde la nouvelle valeur dans le localStorage à chaque changement
     delayInput.addEventListener('change', () => {
         localStorage.setItem('rideEndDelay', delayInput.value);
         console.log(`Délai sauvegardé : ${delayInput.value} secondes`);
     });
+
+
+    // --- LOGIQUE POUR LE DIAGNOSTIC ---
+    function fetchTrackingData() {
+        fetch('/Forloopix/src/api/get_capteur_tracking_data.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    trackingContainer.innerHTML = ''; // Clear existing data
+                    if (data.data.length === 0) {
+                        trackingContainer.innerHTML = '<p>Aucune donnée de capteur disponible.</p>';
+                        return;
+                    }
+                    data.data.forEach(row => {
+                        const diagnosticItem = document.createElement('div');
+                        diagnosticItem.className = 'setting-item';
+                        
+                        const statusClass = row.statut == '1' ? 'status-active' : 'status-inactive';
+                        const statusText = row.statut == '1' ? 'Actif' : 'Inactif';
+
+                        diagnosticItem.innerHTML = `
+                            <div class="setting-info">
+                                <h3 class="setting-title">${row.tronçon}</h3>
+                            </div>
+                            <div class="setting-control">
+                                <span class="status-indicator ${statusClass}">${statusText}</span>
+                            </div>
+                        `;
+                        trackingContainer.appendChild(diagnosticItem);
+                    });
+                } else {
+                    console.error('Erreur de récupération des données de tracking:', data.message);
+                    trackingContainer.innerHTML = '<p>Erreur de chargement des données.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Erreur de communication pour les données de tracking:', error);
+                trackingContainer.innerHTML = '<p>Erreur de communication avec le serveur.</p>';
+            });
+    }
+
+    function resetSensorStatuses() {
+        console.log("Demande de réinitialisation du statut des capteurs...");
+        if (!confirm("Voulez-vous vraiment réinitialiser le statut des derniers capteurs 'Départ' et 'Milieu' ?")) {
+            return;
+        }
+        fetch('/Forloopix/src/api/reset_sensor_status.php', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Statut des capteurs réinitialisé avec succès.');
+                    alert('Les derniers capteurs "Départ" et "Milieu" ont été réinitialisés.');
+                    fetchTrackingData(); // Refresh the table
+                } else {
+                    console.error('Échec de la réinitialisation du statut des capteurs:', data.message);
+                    alert('Erreur lors de la réinitialisation: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur de communication avec l\'API de réinitialisation:', error);
+                alert('Erreur de communication avec le serveur.');
+            });
+    }
+
+    // Event Listeners
+    resetSensorsBtn.addEventListener('click', resetSensorStatuses);
+
+    // Initial data load
+    fetchTrackingData();
 });
 </script>
 
