@@ -43,6 +43,16 @@ ini_set('display_errors', 0);
                 <input type="number" class="setting-input" id="motor-speed" value="150" min="0" max="255">
             </div>
         </div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <h3 class="setting-title">Contrôle Moteur Manuel</h3>
+                <p class="setting-description" id="motor-status-text">État actuel : Inconnu</p>
+            </div>
+            <div class="setting-control">
+                <button id="motor-on-btn" class="btn-control" style="background-color: #28a745; box-shadow: 0 4px 0 #218838; margin-right: 10px;">ON</button>
+                <button id="motor-off-btn" class="btn-control" style="background-color: #dc3545; box-shadow: 0 4px 0 #c82333;">OFF</button>
+            </div>
+        </div>
 
         <div class="setting-item">
             <div class="setting-info">
@@ -65,6 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const motorSpeedInput = document.getElementById('motor-speed');
     const trackingContainer = document.getElementById('tracking-data-container');
     const resetSensorsBtn = document.getElementById('reset-sensors-btn');
+    const motorOnBtn = document.getElementById('motor-on-btn');
+    const motorOffBtn = document.getElementById('motor-off-btn');
+    const motorStatusText = document.getElementById('motor-status-text');
 
     // --- LOGIQUE POUR LE DÉLAI ---
     const savedDelay = localStorage.getItem('rideEndDelay');
@@ -86,6 +99,42 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log(`Vitesse moteur sauvegardée : ${motorSpeedInput.value}`);
     });
 
+    // --- LOGIQUE POUR LE CONTRÔLE MOTEUR ---
+    function fetchMotorStatus() {
+        fetch('/Forloopix/src/api/get_motor_status.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const speed = data.speed;
+                    motorStatusText.textContent = speed > 0 ? `État actuel : ON (Vitesse ${speed})` : 'État actuel : OFF';
+                } else {
+                    motorStatusText.textContent = 'État actuel : Erreur';
+                }
+            }).catch(() => motorStatusText.textContent = 'État actuel : Erreur');
+    }
+
+    function setMotorSpeed(speed) {
+        return fetch('/Forloopix/src/api/set_motor_speed.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ speed: speed })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                fetchMotorStatus(); // Rafraîchir l'état après la commande
+            } else {
+                alert('Erreur lors de la mise à jour de la vitesse.');
+            }
+        }).catch(() => alert('Erreur de communication.'));
+    }
+
+    motorOnBtn.addEventListener('click', () => {
+        const motorSpeed = parseInt(localStorage.getItem('motorSpeed') || '150', 10);
+        setMotorSpeed(motorSpeed);
+    });
+
+    motorOffBtn.addEventListener('click', () => setMotorSpeed(0));
 
     // --- LOGIQUE POUR LE DIAGNOSTIC ---
     function fetchTrackingData() {
@@ -154,6 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial data load
     fetchTrackingData();
+    fetchMotorStatus();
+    setInterval(fetchMotorStatus, 5000); // Rafraîchit l'état du moteur toutes les 5s
 });
 </script>
 

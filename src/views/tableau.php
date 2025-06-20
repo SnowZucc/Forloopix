@@ -73,6 +73,7 @@ try {
                 <img src="<?= htmlspecialchars($current_attraction['image']) ?>" alt="Maquette du manège" class="ride-image">
                 <div id="sensor-1" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-1']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-1']['left'] ?>;"></div>
                 <div id="sensor-2" class="sensor" style="top: <?= $current_attraction['led_positions']['sensor-2']['top'] ?>; left: <?= $current_attraction['led_positions']['sensor-2']['left'] ?>;"></div>
+                <div id="motor-status-display" class="motor-status">Moteur: --</div>
             </div>
         </div>
         <div class="panel-bottom">
@@ -108,6 +109,7 @@ try {
     const sonometerLevel = document.querySelector('.sonometer-level');
     const sonometerValue = document.querySelector('.sonometer-value');
     const sonometerModeToggleBtn = document.getElementById('sonometer-mode-toggle');
+    const motorStatusDisplay = document.getElementById('motor-status-display');
 
     // --- STATE MANAGEMENT ---
     let rideState = {
@@ -141,6 +143,29 @@ try {
             .catch(error => {
                 console.error('Erreur de communication avec l\'API du sonomètre:', error);
                 return 0; // Fallback value
+            });
+    }
+
+    function fetchMotorStatus() {
+        fetch('/Forloopix/src/api/get_motor_status.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const speed = data.speed;
+                    if (speed > 0) {
+                        motorStatusDisplay.textContent = `Moteur: ON (${speed})`;
+                        motorStatusDisplay.style.backgroundColor = '#28a745';
+                    } else {
+                        motorStatusDisplay.textContent = 'Moteur: OFF';
+                        motorStatusDisplay.style.backgroundColor = '#dc3545';
+                    }
+                } else {
+                    motorStatusDisplay.textContent = 'Moteur: Erreur';
+                    motorStatusDisplay.style.backgroundColor = '#6c757d';
+                }
+            }).catch(() => {
+                motorStatusDisplay.textContent = 'Moteur: Erreur';
+                motorStatusDisplay.style.backgroundColor = '#6c757d';
             });
     }
 
@@ -388,6 +413,8 @@ try {
         // Récupération de l'état des capteurs en continu
         fetchSensorStatus(); // Premier appel immédiat
         setInterval(fetchSensorStatus, 2000); // Puis toutes les 2 secondes
+        fetchMotorStatus(); // Appel initial
+        setInterval(fetchMotorStatus, 2000); // Puis toutes les 2 secondes
     });
 
 </script>

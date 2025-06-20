@@ -278,6 +278,22 @@
     background-color: #6c757d;
 }
 
+.motor-status {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    z-index: 10;
+    min-width: 120px;
+    text-align: center;
+}
+
 /* --- FIN TABLEAU DE BORD --- */
 
 /* --- RESPONSIVE TABLEAU DE BORD --- */
