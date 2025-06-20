@@ -185,12 +185,14 @@ try {
 
                     // Déclenche l'arrêt du manège si le capteur du milieu est actif
                     if (rideState.isRunning && sensorStatuses['sensor-2'] == '1' && rideState.rideEndTimeout === null) {
-                        console.log("Capteur Milieu activé, arrêt du manège dans 15 secondes.");
+                        const rideEndDelay = parseInt(localStorage.getItem('rideEndDelay') || '15', 10) * 1000;
+                        console.log(`Capteur Milieu activé, arrêt du manège dans ${rideEndDelay / 1000} secondes.`);
+                        
                         // Empêche de lancer plusieurs minuteurs
                         rideState.rideEndTimeout = setTimeout(() => {
-                            console.log("Fin du timer de 15s. Arrêt du manège.");
+                            console.log(`Fin du timer de ${rideEndDelay / 1000}s. Arrêt du manège.`);
                             resetRide();
-                        }, 15000); // 15 secondes
+                        }, rideEndDelay);
                     }
                 } else {
                     console.error('Erreur de récupération des statuts des capteurs:', data.message);

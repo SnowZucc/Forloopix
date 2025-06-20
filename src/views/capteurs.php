@@ -26,43 +26,34 @@ ini_set('display_errors', 0);
     <div class="settings-panel">
         <div class="setting-item">
             <div class="setting-info">
-                <h3 class="setting-title">Échelle du Sonomètre</h3>
-                <p class="setting-description">Activer pour utiliser une échelle logarithmique pour le Cri-o-mètre.</p>
+                <h3 class="setting-title">Temps avant arrêt après capteur final</h3>
+                <p class="setting-description">Définit le délai en secondes entre l'activation du capteur de milieu de parcours et l'arrêt complet de l'attraction.</p>
             </div>
             <div class="setting-control">
-                <label class="switch">
-                    <input type="checkbox" checked>
-                    <span class="slider round"></span>
-                </label>
-            </div>
-        </div>
-        
-        <div class="setting-item">
-            <div class="setting-info">
-                <h3 class="setting-title">Seuil d'alerte sonore</h3>
-                <p class="setting-description">Définir le niveau de dB à partir duquel une alerte est visible.</p>
-            </div>
-            <div class="setting-control">
-                <input type="number" class="setting-input" value="-10">
-                <span style="margin-left: 5px;">dB</span>
-            </div>
-        </div>
-        
-        <div class="setting-item">
-            <div class="setting-info">
-                <h3 class="setting-title">Sensibilité des capteurs de position</h3>
-                <p class="setting-description">Régler la sensibilité de détection du wagon.</p>
-            </div>
-            <div class="setting-control">
-                 <select class="setting-select">
-                    <option>Basse</option>
-                    <option selected>Moyenne</option>
-                    <option>Haute</option>
-                </select>
+                <input type="number" class="setting-input" id="ride-end-delay" value="15">
+                <span style="margin-left: 5px;">secondes</span>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const delayInput = document.getElementById('ride-end-delay');
+
+    // Charge la valeur depuis le localStorage si elle existe
+    const savedDelay = localStorage.getItem('rideEndDelay');
+    if (savedDelay) {
+        delayInput.value = savedDelay;
+    }
+
+    // Sauvegarde la nouvelle valeur dans le localStorage à chaque changement
+    delayInput.addEventListener('change', () => {
+        localStorage.setItem('rideEndDelay', delayInput.value);
+        console.log(`Délai sauvegardé : ${delayInput.value} secondes`);
+    });
+});
+</script>
 
 <?php include('../templates/footer.php'); ?>
 </body>
