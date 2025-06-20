@@ -53,7 +53,7 @@ ini_set('display_errors', 0);
                 <button id="motor-off-btn" class="btn-control" style="background-color: #dc3545; box-shadow: 0 4px 0 #c82333;">OFF</button>
             </div>
         </div>
-
+        
         <div class="setting-item">
             <div class="setting-info">
                 <h3 class="setting-title">Diagnostic Capteur Tracking</h3>

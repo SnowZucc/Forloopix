@@ -51,7 +51,7 @@ try {
 <div class="dashboard-container">
     <div class="dashboard-header">
         <h1>Panneau de Contrôle - <?= htmlspecialchars($current_attraction['name']) ?></h1>
-        <button id="sonometer-mode-toggle" class="mode-toggle">Sonomètre Simulé</button>
+        <button id="sonometer-mode-toggle" class="mode-toggle"></button>
     </div>
 
     <div class="control-panel">
@@ -81,7 +81,7 @@ try {
                 <p class="panel-title">CRI-O-MÈTRE</p>
                 <div class="sonometer-bar">
                     <div class="sonometer-level" style="width: 0%;"></div>
-                </div>
+        </div>
                 <div class="sonometer-value">-- dB</div>
             </div>
 
@@ -114,13 +114,13 @@ try {
     // --- STATE MANAGEMENT ---
     let rideState = {
         isRunning: false,
+        isCountingDown: false,
         countdownInterval: null,
-        sonometerInterval: null,
         rideEndTimeout: null
     };
 
     let sonometerMode = {
-        isReal: false
+        isReal: true
     };
 
     // --- DATA SIMULATION & API CALLS ---
@@ -203,7 +203,7 @@ try {
             })
             .catch(error => console.error('Erreur de communication avec l\'API de réinitialisation:', error));
     }
-
+    
     function saveLaunch(passengerCount) {
         console.log(`Enregistrement de ${passengerCount} passagers pour ${attractionId}...`);
 
@@ -287,16 +287,16 @@ try {
 
         // Clear all intervals and timeouts
         clearInterval(rideState.countdownInterval);
-        clearInterval(rideState.sonometerInterval);
         clearTimeout(rideState.rideEndTimeout);
 
         // Reset visuals
         displayTitle.textContent = 'COMPTEUR PASSAGES';
         setDisplayValue(currentLaunchCount);
-        updateSonometer(0, true); // Reset sonometer display
+        updateSonometerGauge(0, true); // Reset sonometer display
         
         // Reset state
         rideState.isRunning = false;
+        rideState.isCountingDown = false;
         rideState.rideEndTimeout = null; // Important de réinitialiser le minuteur
         startBtn.disabled = false;
         stopBtn.disabled = false;
@@ -313,6 +313,7 @@ try {
 
         resetSensorStatuses(); // Réinitialise les capteurs avant de démarrer
         rideState.isRunning = true;
+        rideState.isCountingDown = true;
         startBtn.disabled = true;
         
         let countdown = 10;
@@ -336,17 +337,15 @@ try {
         }, 1000);
     }
 
-    function updateSonometer(value, isReset = false) {
-        // 1. Mettre à jour l'affichage numérique (écran principal)
-        if (!isReset) {
-            setDisplayValue(Math.round(value));
-        }
-
-        // 2. Mettre à jour la jauge et sa valeur textuelle
-        let percentage = 0;
+    function updateSonometerGauge(value, isReset = false) {
         if (isReset) {
             sonometerValue.textContent = '-- dB';
-        } else if (sonometerMode.isReal) {
+            sonometerLevel.style.width = '0%';
+            return;
+        }
+    
+        let percentage = 0;
+        if (sonometerMode.isReal) {
             // Mode réel: on mappe une plage de 60-120 dB à 0-100%
             const minDb = 60;
             const maxDb = 120;
@@ -364,6 +363,7 @@ try {
 
     function startRideSimulation(passengerCount) {
         console.log("Ride simulation started.");
+        rideState.isCountingDown = false;
         
         // Démarre le moteur
         const motorSpeed = parseInt(localStorage.getItem('motorSpeed') || '150', 10);
@@ -373,18 +373,9 @@ try {
         saveLaunch(passengerCount);
 
         displayTitle.textContent = 'SONOMÈTRE';
-        
-        // Démarre les mises à jour du sonomètre
-        rideState.sonometerInterval = setInterval(() => {
-            if (sonometerMode.isReal) {
-                fetchRealSonometerValue().then(value => updateSonometer(value));
-            } else {
-                const dbValue = getSonometerValue();
-                updateSonometer(dbValue);
-            }
-        }, 1500);
 
         // La logique des capteurs est maintenant gérée par `fetchSensorStatus` et n'est plus liée au cycle du manège.
+        // La logique du sonomètre est maintenant gérée par un intervalle global.
     }
 
     // --- EVENT LISTENERS ---
@@ -395,16 +386,6 @@ try {
         sonometerMode.isReal = !sonometerMode.isReal;
         sonometerModeToggleBtn.textContent = sonometerMode.isReal ? 'Sonomètre Réel' : 'Sonomètre Simulé';
         console.log(`Basculement vers le mode sonomètre: ${sonometerMode.isReal ? 'Réel' : 'Simulé'}`);
-        
-        // Si on change de mode pendant que l'attraction tourne, on met à jour immédiatement
-        if (rideState.isRunning) {
-            if (sonometerMode.isReal) {
-                fetchRealSonometerValue().then(value => updateSonometer(value));
-            } else {
-                const dbValue = getSonometerValue();
-                updateSonometer(dbValue);
-            }
-        }
     });
 
     // --- INITIALIZATION ---
@@ -413,8 +394,26 @@ try {
         // Récupération de l'état des capteurs en continu
         fetchSensorStatus(); // Premier appel immédiat
         setInterval(fetchSensorStatus, 2000); // Puis toutes les 2 secondes
-        fetchMotorStatus(); // Appel initial
+        
+        fetchMotorStatus(); // Appel initial pour l'état du moteur
         setInterval(fetchMotorStatus, 2000); // Puis toutes les 2 secondes
+
+        // Intervalle global pour le sonomètre
+        setInterval(() => {
+            const valuePromise = sonometerMode.isReal 
+                ? fetchRealSonometerValue()
+                : Promise.resolve(getSonometerValue());
+
+            valuePromise.then(value => {
+                // 1. Toujours mettre à jour la jauge
+                updateSonometerGauge(value);
+
+                // 2. Mettre à jour l'affichage principal si l'attraction est en cours (et non en compte à rebours)
+                if (rideState.isRunning && !rideState.isCountingDown) {
+                    setDisplayValue(Math.round(value));
+                }
+            });
+        }, 1500);
     });
 
 </script>
