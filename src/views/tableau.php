@@ -51,6 +51,7 @@ try {
 <div class="dashboard-container">
     <div class="dashboard-header">
         <h1>Panneau de Contrôle - <?= htmlspecialchars($current_attraction['name']) ?></h1>
+        <button id="sonometer-mode-toggle" class="mode-toggle">Sonomètre Simulé</button>
     </div>
 
     <div class="control-panel">
@@ -78,9 +79,9 @@ try {
             <div class="sonometer">
                 <p class="panel-title">CRI-O-MÈTRE</p>
                 <div class="sonometer-bar">
-                    <div class="sonometer-level" style="width: 75%;"></div>
-        </div>
-                <div class="sonometer-value">-12 dB</div>
+                    <div class="sonometer-level" style="width: 0%;"></div>
+                </div>
+                <div class="sonometer-value">-- dB</div>
             </div>
 
             <div class="controls">
@@ -104,6 +105,9 @@ try {
         1: document.getElementById('sensor-1'),
         2: document.getElementById('sensor-2')
     };
+    const sonometerLevel = document.querySelector('.sonometer-level');
+    const sonometerValue = document.querySelector('.sonometer-value');
+    const sonometerModeToggleBtn = document.getElementById('sonometer-mode-toggle');
 
     // --- STATE MANAGEMENT ---
     let rideState = {
@@ -113,12 +117,54 @@ try {
         rideEndTimeout: null
     };
 
+    let sonometerMode = {
+        isReal: false
+    };
+
     // --- DATA SIMULATION & API CALLS ---
     function getSonometerValue() {
         // Simulates fetching a value from a sensor
         return Math.floor(Math.random() * ((-5) - (-25) + 1)) + (-25);
     }
     
+    function fetchRealSonometerValue() {
+        return fetch('/Forloopix/src/api/get_sonometer_value.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    return data.value;
+                } else {
+                    console.error('Erreur de récupération de la valeur réelle du sonomètre:', data.message);
+                    return 0; // Fallback value
+                }
+            })
+            .catch(error => {
+                console.error('Erreur de communication avec l\'API du sonomètre:', error);
+                return 0; // Fallback value
+            });
+    }
+
+    function setMotorSpeed(speed) {
+        console.log(`Réglage de la vitesse du moteur sur : ${speed}`);
+
+        fetch('/Forloopix/src/api/set_motor_speed.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ speed: speed })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Vitesse moteur mise à jour avec succès :', data.message);
+            } else {
+                console.error('Erreur lors de la mise à jour de la vitesse du moteur :', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur de communication avec l\'API du moteur:', error);
+        });
+    }
+
     function resetSensorStatuses() {
         console.log("Demande de réinitialisation du statut des capteurs...");
         fetch('/Forloopix/src/api/reset_sensor_status.php', { method: 'POST' })
@@ -212,6 +258,7 @@ try {
     function resetRide() {
         console.log("Ride is resetting.");
         resetSensorStatuses(); // Réinitialise les capteurs côté serveur
+        setMotorSpeed(0); // Réinitialise la vitesse du moteur
 
         // Clear all intervals and timeouts
         clearInterval(rideState.countdownInterval);
@@ -221,6 +268,7 @@ try {
         // Reset visuals
         displayTitle.textContent = 'COMPTEUR PASSAGES';
         setDisplayValue(currentLaunchCount);
+        updateSonometer(0, true); // Reset sonometer display
         
         // Reset state
         rideState.isRunning = false;
@@ -263,21 +311,52 @@ try {
         }, 1000);
     }
 
+    function updateSonometer(value, isReset = false) {
+        // 1. Mettre à jour l'affichage numérique (écran principal)
+        if (!isReset) {
+            setDisplayValue(Math.round(value));
+        }
+
+        // 2. Mettre à jour la jauge et sa valeur textuelle
+        let percentage = 0;
+        if (isReset) {
+            sonometerValue.textContent = '-- dB';
+        } else if (sonometerMode.isReal) {
+            // Mode réel: on mappe une plage de 60-120 dB à 0-100%
+            const minDb = 60;
+            const maxDb = 120;
+            percentage = Math.max(0, Math.min(100, ((value - minDb) / (maxDb - minDb)) * 100));
+            sonometerValue.textContent = value.toFixed(1) + ' dB';
+        } else {
+            // Mode simulé: on mappe une plage de -25 à -5 dBFS à 0-100%
+            const minSim = -25;
+            const maxSim = -5;
+            percentage = Math.max(0, Math.min(100, ((value - minSim) / (maxSim - minSim)) * 100));
+            sonometerValue.textContent = value + ' dBFS';
+        }
+        sonometerLevel.style.width = percentage + '%';
+    }
+
     function startRideSimulation(passengerCount) {
         console.log("Ride simulation started.");
+        
+        // Démarre le moteur
+        const motorSpeed = parseInt(localStorage.getItem('motorSpeed') || '150', 10);
+        setMotorSpeed(motorSpeed);
+
         currentLaunchCount++; 
         saveLaunch(passengerCount);
 
-        displayTitle.textContent = 'SONOMÈTRE (dB)';
+        displayTitle.textContent = 'SONOMÈTRE';
         
-        // Affiche la première valeur immédiatement
-        const firstDbValue = getSonometerValue();
-        setDisplayValue(firstDbValue);
-
-        // Puis démarre les mises à jour
+        // Démarre les mises à jour du sonomètre
         rideState.sonometerInterval = setInterval(() => {
-            const dbValue = getSonometerValue();
-            setDisplayValue(dbValue);
+            if (sonometerMode.isReal) {
+                fetchRealSonometerValue().then(value => updateSonometer(value));
+            } else {
+                const dbValue = getSonometerValue();
+                updateSonometer(dbValue);
+            }
         }, 1500);
 
         // La logique des capteurs est maintenant gérée par `fetchSensorStatus` et n'est plus liée au cycle du manège.
@@ -286,6 +365,22 @@ try {
     // --- EVENT LISTENERS ---
     startBtn.addEventListener('click', startCountdown);
     stopBtn.addEventListener('click', resetRide);
+
+    sonometerModeToggleBtn.addEventListener('click', () => {
+        sonometerMode.isReal = !sonometerMode.isReal;
+        sonometerModeToggleBtn.textContent = sonometerMode.isReal ? 'Sonomètre Réel' : 'Sonomètre Simulé';
+        console.log(`Basculement vers le mode sonomètre: ${sonometerMode.isReal ? 'Réel' : 'Simulé'}`);
+        
+        // Si on change de mode pendant que l'attraction tourne, on met à jour immédiatement
+        if (rideState.isRunning) {
+            if (sonometerMode.isReal) {
+                fetchRealSonometerValue().then(value => updateSonometer(value));
+            } else {
+                const dbValue = getSonometerValue();
+                updateSonometer(dbValue);
+            }
+        }
+    });
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {

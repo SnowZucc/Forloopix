@@ -34,6 +34,15 @@ ini_set('display_errors', 0);
                 <span style="margin-left: 5px;">secondes</span>
             </div>
         </div>
+        <div class="setting-item">
+            <div class="setting-info">
+                <h3 class="setting-title">Vitesse du Moteur</h3>
+                <p class="setting-description">Définit la vitesse du moteur au démarrage de l'attraction (0-255).</p>
+            </div>
+            <div class="setting-control">
+                <input type="number" class="setting-input" id="motor-speed" value="150" min="0" max="255">
+            </div>
+        </div>
 
         <div class="setting-item">
             <div class="setting-info">
@@ -53,6 +62,7 @@ ini_set('display_errors', 0);
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const delayInput = document.getElementById('ride-end-delay');
+    const motorSpeedInput = document.getElementById('motor-speed');
     const trackingContainer = document.getElementById('tracking-data-container');
     const resetSensorsBtn = document.getElementById('reset-sensors-btn');
 
@@ -64,6 +74,16 @@ document.addEventListener('DOMContentLoaded', () => {
     delayInput.addEventListener('change', () => {
         localStorage.setItem('rideEndDelay', delayInput.value);
         console.log(`Délai sauvegardé : ${delayInput.value} secondes`);
+    });
+
+    // --- LOGIQUE POUR LA VITESSE MOTEUR ---
+    const savedMotorSpeed = localStorage.getItem('motorSpeed');
+    if (savedMotorSpeed) {
+        motorSpeedInput.value = savedMotorSpeed;
+    }
+    motorSpeedInput.addEventListener('change', () => {
+        localStorage.setItem('motorSpeed', motorSpeedInput.value);
+        console.log(`Vitesse moteur sauvegardée : ${motorSpeedInput.value}`);
     });
 
 
