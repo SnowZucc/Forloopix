@@ -9,8 +9,9 @@ try {
         throw new Exception("Database connection failed: " . $conn->connect_error);
     }
 
-    // On cible spécifiquement les capteurs "Départ" (ID 24) et "Milieu" (ID 25)
-    $result = $conn->query("SELECT id, statut, tronçon FROM capteur_tracking WHERE id IN (24, 25)");
+    // Récupère le dernier statut pour les tronçons "Départ" et "Milieu"
+    $query = "(SELECT id, statut, tronçon FROM capteur_tracking WHERE tronçon = 'Départ' ORDER BY id DESC LIMIT 1) UNION ALL (SELECT id, statut, tronçon FROM capteur_tracking WHERE tronçon = 'Milieu' ORDER BY id DESC LIMIT 1)";
+    $result = $conn->query($query);
 
     if (!$result) {
         throw new Exception("Query failed: " . $conn->error);
