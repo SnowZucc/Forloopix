@@ -109,7 +109,8 @@ try {
     let rideState = {
         isRunning: false,
         countdownInterval: null,
-        sonometerInterval: null
+        sonometerInterval: null,
+        rideEndTimeout: null
     };
 
     // --- DATA SIMULATION & API CALLS ---
@@ -118,6 +119,20 @@ try {
         return Math.floor(Math.random() * ((-5) - (-25) + 1)) + (-25);
     }
     
+    function resetSensorStatuses() {
+        console.log("Demande de réinitialisation du statut des capteurs...");
+        fetch('/Forloopix/src/api/reset_sensor_status.php', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Statut des capteurs réinitialisé avec succès.');
+                } else {
+                    console.error('Échec de la réinitialisation du statut des capteurs:', data.message);
+                }
+            })
+            .catch(error => console.error('Erreur de communication avec l\'API de réinitialisation:', error));
+    }
+
     function saveLaunch(passengerCount) {
         console.log(`Enregistrement de ${passengerCount} passagers pour ${attractionId}...`);
 
@@ -167,6 +182,16 @@ try {
                             }
                         }
                     }
+
+                    // Déclenche l'arrêt du manège si le capteur du milieu est actif
+                    if (rideState.isRunning && sensorStatuses['sensor-2'] == '1' && rideState.rideEndTimeout === null) {
+                        console.log("Capteur Milieu activé, arrêt du manège dans 15 secondes.");
+                        // Empêche de lancer plusieurs minuteurs
+                        rideState.rideEndTimeout = setTimeout(() => {
+                            console.log("Fin du timer de 15s. Arrêt du manège.");
+                            resetRide();
+                        }, 15000); // 15 secondes
+                    }
                 } else {
                     console.error('Erreur de récupération des statuts des capteurs:', data.message);
                 }
@@ -184,9 +209,12 @@ try {
 
     function resetRide() {
         console.log("Ride is resetting.");
+        resetSensorStatuses(); // Réinitialise les capteurs côté serveur
+
         // Clear all intervals and timeouts
         clearInterval(rideState.countdownInterval);
         clearInterval(rideState.sonometerInterval);
+        clearTimeout(rideState.rideEndTimeout);
 
         // Reset visuals
         displayTitle.textContent = 'COMPTEUR PASSAGES';
@@ -194,6 +222,7 @@ try {
         
         // Reset state
         rideState.isRunning = false;
+        rideState.rideEndTimeout = null; // Important de réinitialiser le minuteur
         startBtn.disabled = false;
         stopBtn.disabled = false;
     }
@@ -207,6 +236,7 @@ try {
             return;
         }
 
+        resetSensorStatuses(); // Réinitialise les capteurs avant de démarrer
         rideState.isRunning = true;
         startBtn.disabled = true;
         
